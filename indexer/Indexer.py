@@ -17,7 +17,7 @@ class Pageinfo:
 class Fileprocess:
 
     def __init__(self):
-        self.dataPath=os.getcwd()+"/data" # get the path of data to be process
+        self.dataPath=os.getcwd()+"/data/data/4c/tux-4/polybot/gzipped_sorted_nz" # get the path of data to be process
         self.indexPath=os.getcwd()
         self.docBuf={}    
         self.indexBuf={}    
@@ -27,6 +27,8 @@ class Fileprocess:
         self.indexNumber=0
         self.indexCurSize=0
         self.indexFile=open(self.indexPath+'/index.txt','w')
+        self.totallen=0
+        self.metaFile=open(self.indexPath+'/final/meta','w')
 
     def writeFile(self):
         for k,v in self.docBuf.iteritems():
@@ -85,9 +87,9 @@ class Fileprocess:
 def valid_token(tok):
     if len(str(tok))>38:
         return False
-    if re.search('^[0-9a-zA-Z]+$',tok.split(' ')[0]):
-        return True
-    return False
+    '''if re.search('^[0-9a-zA-Z]+$',tok.split(' ')[0]):
+        return True'''
+    return True
      
 def main():
     htmlFile=None
@@ -151,6 +153,7 @@ def main():
                         #fp.add2IndexBuf(fp.docID,tokhash,tokPos)
                         #page=Pageinfo(url,num_of_tok)
                         fp.docBuf[fp.docID]=[url,num_of_tok]
+                        fp.totallen+=num_of_tok;
                     except TypeError,e:
                         e
                         #print e
@@ -166,6 +169,7 @@ def main():
     #fp.writeFile()
     fp.outIndex()
     fp.outDoc()
+    fp.metaFile.write(str(fp.totallen/float(fp.docID)))
     indFileIn.close()
     htmlFile.close()
 
